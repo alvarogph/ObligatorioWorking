@@ -10,6 +10,7 @@ import "./App.css";
 function App() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  
 
   // Cargar datos del usuario al iniciar la aplicación
   useEffect(() => {
@@ -24,8 +25,10 @@ function App() {
     }
   }, []);
 
+  
+
   // Función para manejar el login y guardar el apiKey
-  const _onLogin = (loginData) => {
+    const _onLogin = (loginData) => {
     const { apiKey, ...otherData } = loginData;
     const userDataToStore = { ...otherData, apiKey };
 
@@ -34,6 +37,7 @@ function App() {
     
     navigate("/dashboard"); // Redirigir al Dashboard después del login
   };
+
 
   // Función para manejar el logout
   const _onLogout = () => {

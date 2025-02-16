@@ -40,6 +40,7 @@ const Login = ({ onLogin }) => {
       }
 
       onLogin(data); // Guardar datos en localStorage
+      console.log(data)
       navigate("/dashboard");
 
     } catch (error) {
