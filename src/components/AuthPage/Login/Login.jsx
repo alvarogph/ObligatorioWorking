@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import Button from "../../UI/Button/Button";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [credenciales, setCredenciales] = useState({
     usuario: "",
     password: "",
@@ -39,7 +39,7 @@ const Login = () => {
         return;
       }
 
-      console.log("Inicio de sesión exitoso:", data);
+      onLogin(data); // Guardar datos en localStorage
       navigate("/dashboard");
 
     } catch (error) {
