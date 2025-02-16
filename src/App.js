@@ -1,12 +1,12 @@
 //import Dashboard from "./components/Menu/Dashboard";
-import Login from "./components/AuthPage/Login"
+import Login from "./components/AuthPage/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import logo from './logo.svg';
 // import Login from "./components/Inicio/Login";
 // import Registro from "./components/Inicio/Registro";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import './App.css';
-//import Registro from "./components/AuthPage/Registro";
+import "./App.css";
+import Registro from "./components/AuthPage/Registro/Registro";
 import Dashboard from "./components/Dashboard/Dashboard";
 import { useEffect, useState } from "react";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -34,20 +34,12 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login onLogin={_onLogin} />} />
-        <Route
-          path="/login"
-          element={<Login onLogin={_onLogin} userData={userData} />}
-        />
-        <Route path="/signup" element={<h1>Hola soy el sign up</h1>} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute userData={userData}>
-              <Dashboard userData={userData} onLogout={_onLogout} />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/login" element={<Login />} />
+        {/* <PrivateRoute userData={userData}>
+          <Dashboard userData={userData} onLogout={_onLogout} />
+        </PrivateRoute> */}
       </Routes>
     </div>
   );
