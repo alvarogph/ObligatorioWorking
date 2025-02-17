@@ -1,10 +1,10 @@
 import React from "react";
+import Header from "./Header/Header";
 
 const Dashboard = () => {
   return (
     <div>
-      <h1>Bienvenido al Dashboard</h1>
-      <p>Has iniciado sesión correctamente.</p>
+      <Header/>
     </div>
   );
 };
