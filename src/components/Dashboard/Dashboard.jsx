@@ -4,7 +4,7 @@ import Header from "./Header/Header";
 const Dashboard = () => {
   return (
     <div>
-      <Header/>
+      <Header />
     </div>
   );
 };

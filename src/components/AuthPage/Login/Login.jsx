@@ -24,13 +24,16 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const response = await fetch("https://movetrack.develotion.com/login.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credenciales),
-      });
+      const response = await fetch(
+        "https://movetrack.develotion.com/login.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credenciales),
+        }
+      );
 
       const data = await response.json();
 
@@ -41,7 +44,10 @@ const Login = ({ onLogin }) => {
 
       onLogin(data); // Guarda Datos de inicio en LocalStorage
       navigate("/dashboard");
-
+      localStorage.setItem("credenciales", JSON.stringify(credenciales));
+      onLogin(credenciales);
+      console.log(data);
+      console.log(credenciales);
     } catch (error) {
       console.error("Error en la solicitud:", error);
       setError("Error al conectar con el servidor");
