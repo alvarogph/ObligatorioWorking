@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginSuccess, loginFailure } from "../../../app/slices/authSlice";
 import "./Login.css";
 import Button from "../../UI/Button/Button";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [credenciales, setCredenciales] = useState({
     usuario: "",
     password: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const cambiosInputLogin = (element) => {
     const { name, value } = element.target;
@@ -39,18 +42,17 @@ const Login = ({ onLogin }) => {
 
       if (data.codigo !== 200) {
         setError("Credenciales incorrectas");
+        dispatch(loginFailure("Credenciales incorrectas"));
         return;
       }
 
-      onLogin(data); // Guarda Datos de inicio en LocalStorage
-      navigate("/dashboard");
+      dispatch(loginSuccess(data));
       localStorage.setItem("credenciales", JSON.stringify(credenciales));
-      onLogin(credenciales);
-      console.log(data);
-      console.log(credenciales);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error en la solicitud:", error);
       setError("Error al conectar con el servidor");
+      dispatch(loginFailure("Error al conectar con el servidor"));
     }
   };
 
@@ -76,7 +78,6 @@ const Login = ({ onLogin }) => {
         <Button type="submit">Iniciar Sesión</Button>
       </form>
 
-      {/* Botón para ir a la página de registro */}
       <p className="register-link">
         ¿Aún no tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
       </p>

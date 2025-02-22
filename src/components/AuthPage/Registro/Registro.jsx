@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registrationStart, registrationSuccess, registrationFailure } from "../../../app/slices/registroSlice";
 import Button from "../../UI/Button/Button"; // Ajusta la ruta según tu estructura
 import "./Registro.css";
 
@@ -10,9 +12,9 @@ const Registro = () => {
     password: "",
     idPais: "",
   });
-  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
+  const { isSubmitting, error } = useSelector((state) => state.registro);
 
   // Obtener la lista de países al cargar el componente
   useEffect(() => {
@@ -25,12 +27,12 @@ const Registro = () => {
         const data = await response.json();
         setPaises(data.paises);
       } catch (error) {
-        setError("No se pudo cargar la lista de países");
+        dispatch(registrationFailure("No se pudo cargar la lista de países"));
         console.error(error);
       }
     };
     arrayPaises();
-  }, []);
+  }, [dispatch]);
 
   // Manejar cambios en los campos del formulario
   const cambiosFormulario = (element) => {
@@ -46,12 +48,11 @@ const Registro = () => {
     formulario.preventDefault();
   
     if (!datosRegistro.usuario || !datosRegistro.password || !datosRegistro.idPais) {
-      setError("Todos los campos son obligatorios");
+      dispatch(registrationFailure("Todos los campos son obligatorios"));
       return;
     }
 
-    setIsSubmitting(true);
-    setError("");
+    dispatch(registrationStart());
   
     try {
       const response = await fetch("https://movetrack.develotion.com/usuarios.php", {
@@ -66,31 +67,20 @@ const Registro = () => {
   
       if (data.codigo !== 200) {
         if (data.codigo === 409) {
-          setError(data.mensaje); // Mostrar mensaje de error de la API
+          dispatch(registrationFailure(data.mensaje)); // Mostrar mensaje de error de la API
         } else {
-          setError("Error al registrar el usuario");
+          dispatch(registrationFailure("Error al registrar el usuario"));
         }
-
-        setTimeout(() => {
-          setIsSubmitting(false);
-        }, 1000);
         return;
       }
 
       console.log("Usuario registrado:", data);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        navigate("/");
-      }, 1000);; 
-      
-      // Redirigir después de un registro exitoso
+      dispatch(registrationSuccess());
+      navigate("/login"); // Redirigir después de un registro exitoso
   
     } catch (error) {
       console.error("Error en la solicitud:", error);
-      setError("Error al conectar con el servidor");
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 1000);
+      dispatch(registrationFailure("Error al conectar con el servidor"));
     }
   };
 
@@ -130,8 +120,8 @@ const Registro = () => {
         </Button>
       </form>
       <p className="register-link">
-       <Link to="/login" >Volver a login</Link>
-            </p>
+        <Link to="/login">Volver a login</Link>
+      </p>
     </div>
   );
 };

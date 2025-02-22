@@ -1,18 +1,19 @@
-//import Dashboard from "../Dashboard";
-import { useState } from "react";
-import Login from "../../AuthPage/Login/Login";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../app/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 
-function Header({ onLogout }) {
+function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const CerrarSesion = () => {
     localStorage.clear();
+    dispatch(logout());
     navigate("/login");
   };
-  
+
   const credenciales = JSON.parse(localStorage.getItem("credenciales"));
-  console.log(credenciales.usuario)
+  console.log(credenciales.usuario);
 
   return (
     <header
@@ -24,7 +25,7 @@ function Header({ onLogout }) {
         color: "white",
       }}
     >
-      <h2>Bienvenido, {credenciales.usuario  } </h2>
+      <h2>Bienvenido, {credenciales.usuario}</h2>
       <button
         onClick={CerrarSesion}
         style={{
