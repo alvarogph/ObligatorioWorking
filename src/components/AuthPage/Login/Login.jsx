@@ -47,6 +47,7 @@ const Login = () => {
       }
 
       dispatch(loginSuccess(data));
+      localStorage.setItem("userData", JSON.stringify(data));
       localStorage.setItem("credenciales", JSON.stringify(credenciales));
       navigate("/dashboard");
     } catch (error) {

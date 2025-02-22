@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { logout } from "../../../app/slices/authSlice";
+import { logout } from "../../../app/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function Header() {

@@ -1,5 +1,5 @@
 const BASE_URL = "https://movetrack.develotion.com";
-//const TODO_BASE_URL = "https://jsonplaceholder.typicode.com";
+
 const login = async (username, password) => {
   try {
     const response = await fetch(`${BASE_URL}/login.php`, {
@@ -22,7 +22,82 @@ const login = async (username, password) => {
   }
 };
 
-export  { login};
+const getActividades = async (apiKey, idUser) => {
+  try {
+    const response = await fetch(`${BASE_URL}/actividades.php`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: apiKey,
+        iduser: idUser,
+      },
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log("API response data:", data);
+      return data;
+    } else {
+      return Promise.reject("Ha ocurrido un error");
+    }
+  } catch (error) {
+    return Promise.reject("Ha ocurrido un error");
+  }
+};
+
+const saveRegistro = async (apiKey, idUser, data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/registros.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: apiKey,
+        iduser: idUser,
+      },
+      body: JSON.stringify({
+       data
+      })
+    });
+    if (response.status == 200) {
+      return response.json();
+    } else {
+      return Promise.reject("Ha ocurrido un error");
+    }
+  } catch (error) {
+    return Promise.reject("Ha ocurrido un error");
+  }
+};
+
+const obtenerRegistros = async (apiKey, idUser, idUsuario) => {
+  try {
+    const response = await fetch(`${BASE_URL}/registros.phpidUsuario${idUsuario}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: apiKey,
+        iduser: idUser,
+      }
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log("API response data:", data);
+      return data;
+    } else {
+      return Promise.reject("Ha ocurrido un error");
+    }
+  } catch (error) {
+    return Promise.reject("Ha ocurrido un error");
+  }
+};
+
+
+
+
+
+
+
+
+
+export { login, getActividades, saveRegistro, obtenerRegistros};
 
 // const getToDos = async (userID) => {
 //   try {

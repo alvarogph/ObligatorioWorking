@@ -1,76 +1,114 @@
-// import { useRef } from "react";
-// //import { saveToDo } from "../../../../services/api";
-// import { getUserDataFromLocalStorage } from "../../../../utils/utils";
-// import { onAddToDo } from "../../../../app/slices/userSlice";
-// import { useDispatch } from "react-redux";
+import React, { useRef, useState, useEffect } from "react";
+import { getUserDataFromLocalStorage } from "../../../../utils/utils";
+import { getActividades, saveRegistro } from "../../../../services/api";
+import { useDispatch } from "react-redux";
+import { registrationStart, registrationSuccess, registrationFailure } from "../../../../app/slices/registroSlice";
 
-// const ToDoModal = ({ onToggleModal }) => {
-//   const inputTitleRef = useRef();
-//   const inputDescriptionRef = useRef();
-//   const dispatcher = useDispatch();
+const EjerciciosModal = ({ onToggleModal }) => {
+  const dispatch = useDispatch();
+  const inputTiempoRef = useRef();
+  const inputFechaRef = useRef();
+  const [actividades, setActividades] = useState([]);
+  const [message, setMessage] = useState("");
 
-//   const _onHandleClick = async () => {
-//     const title = inputTitleRef.current.value;
-//     const description = inputDescriptionRef.current.value;
+  useEffect(() => {
+    const fetchActividades = async () => {
+      const userData = getUserDataFromLocalStorage();
+      if (userData) {
+        const { apiKey, id } = userData;
+        try {
+          const actividadesData = await getActividades(apiKey, id);
+          console.log("Actividades data:", actividadesData);
+          if (actividadesData && actividadesData.actividades) {
+            setActividades(actividadesData.actividades);
+          } else {
+            console.error("Invalid data structure:", actividadesData);
+          }
+        } catch (error) {
+          console.error("Error fetching actividades:", error);
+        }
+      }
+    };
+    fetchActividades();
+  }, []);
 
-//     if (title.length > 0 && description.length > 0) {
-//       try {
-//         const userData = getUserDataFromLocalStorage();
-//         if (userData) {
-//           const { id, apiKey } = userData;
-//           const response = await saveToDo(title, description, id, apiKey);
-//           dispatcher(onAddToDo(response));
-//           onToggleModal();
-//         }
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//   };
+  const guardarRegistro = async () => {
+    const userData = getUserDataFromLocalStorage();
+    const actividad = document.getElementById("actividad-select").value;
+    const tiempo = inputTiempoRef.current.value;
+    const fecha = inputFechaRef.current.value;
+    if (userData) {
+      const { apiKey, id } = userData;
+      const data = { actividad, tiempo, fecha };
+      try {
+        dispatch(registrationStart());
+        const registros = await saveRegistro(apiKey, id, data);
+        console.log("Registros data:", registros);
 
-//   return (
-//     <div
-//       className="modal show d-block"
-//       tabIndex="-1"
-//       role="dialog"
-//       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-//     >
-//       <div className="modal-dialog" role="document">
-//         <div className="modal-content">
-//           <div className="modal-header">
-//             <h5 className="modal-title">Crear Tarea</h5>
-//             <button type="button" className="close" onClick={onToggleModal}>
-//               <span>&times;</span>
-//             </button>
-//           </div>
-//           <div className="modal-body">
-//             <form>
-//               <div className="form-group">
-//                 <label>Título de la tarea</label>
-//                 <input
-//                   type="text"
-//                   className="form-control"
-//                   ref={inputTitleRef}
-//                 />
-//               </div>
-//               <div className="form-group">
-//                 <label>Descripción de la tarea</label>
-//                 <textarea className="form-control" ref={inputDescriptionRef} />
-//               </div>
-//               <button
-//                 type="button"
-//                 className="btn btn-primary"
-//                 onClick={_onHandleClick}
-//               >
-//                 Crear
-//               </button>
-//             </form>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+        inputTiempoRef.current.value = "";
+        inputFechaRef.current.value = "";
+        document.getElementById("actividad-select").selectedIndex = 0;
 
-// export default ToDoModal;
+        setMessage(registros.mensaje);
+        dispatch(registrationSuccess());
+      } catch (error) {
+        console.error("Error fetching actividades:", error);
+        dispatch(registrationFailure(error.message));
+      }
+    }
+  };
+
+  return (
+    <div
+      className="modal show d-block"
+      tabIndex="-1"
+      role="dialog"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Ejercicios Modal</h5>
+            <button type="button" className="close" onClick={onToggleModal}>
+              <span>&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            {message && <div className="alert alert-success">{message}</div>}
+            <form>
+              <div className="form-group">
+                <label>Actividad</label>
+                <select id="actividad-select" className="form-control">
+                  {actividades.map((actividad) => (
+                    <option key={actividad.id} value={actividad.id}>
+                      {actividad.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Tiempo</label>
+                <input type="text" className="form-control" ref={inputTiempoRef} />
+              </div>
+              <div className="form-group">
+                <label>Fecha</label>
+                <input type="date" className="form-control" ref={inputFechaRef} />
+              </div>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={onToggleModal}>
+              Cerrar
+            </button>
+            <button type="button" className="btn btn-primary" onClick={guardarRegistro}>
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EjerciciosModal;
 

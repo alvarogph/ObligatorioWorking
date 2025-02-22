@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registrationStart, registrationSuccess, registrationFailure } from "../../../app/slices/registroSlice";
+import { registrationStart, registrationSuccess, registrationFailure } from "../../../app/slices/userSlice";
 import Button from "../../UI/Button/Button"; // Ajusta la ruta según tu estructura
 import "./Registro.css";
 

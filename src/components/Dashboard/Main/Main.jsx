@@ -15,8 +15,8 @@ const Main = () => {
     <>
       <Estadisticas />
       <Grafico />
-      {/* <ListaEjercicios onToggleModal={_onToggleModal} />
-      {showModal ? <EjerciciosModal onToggleModal={_onToggleModal} /> : ""} */}
+      <ListaEjercicios onToggleModal={_onToggleModal} />
+      {showModal ? <EjerciciosModal onToggleModal={_onToggleModal} /> : ""}
     </>
   );
 };
