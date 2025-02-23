@@ -22,7 +22,7 @@ function App() {
     if (localData) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, []); // Add an empty dependency array here
 
   const _onLogout = () => {
     localStorage.removeItem("userData");

@@ -1,8 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import { getUserDataFromLocalStorage } from "../../../../utils/utils";
-import { getActividades, saveRegistro } from "../../../../services/api";
+import { getActividades, saveRegistro, obtenerRegistros } from "../../../../services/api";
 import { useDispatch } from "react-redux";
-import { registrationStart, registrationSuccess, registrationFailure } from "../../../../app/slices/registroSlice";
+import {
+  registrationStart,
+  registrationSuccess,
+  registrationFailure,
+} from "../../../../app/slices/registroSlice";
 
 const EjerciciosModal = ({ onToggleModal }) => {
   const dispatch = useDispatch();
@@ -18,7 +22,6 @@ const EjerciciosModal = ({ onToggleModal }) => {
         const { apiKey, id } = userData;
         try {
           const actividadesData = await getActividades(apiKey, id);
-          console.log("Actividades data:", actividadesData);
           if (actividadesData && actividadesData.actividades) {
             setActividades(actividadesData.actividades);
           } else {
@@ -42,13 +45,11 @@ const EjerciciosModal = ({ onToggleModal }) => {
       const data = { actividad, tiempo, fecha };
       try {
         dispatch(registrationStart());
+        
         const registros = await saveRegistro(apiKey, id, data);
-        console.log("Registros data:", registros);
-
         inputTiempoRef.current.value = "";
         inputFechaRef.current.value = "";
-        document.getElementById("actividad-select").selectedIndex = 0;
-
+  
         setMessage(registros.mensaje);
         dispatch(registrationSuccess());
       } catch (error) {
@@ -88,19 +89,35 @@ const EjerciciosModal = ({ onToggleModal }) => {
               </div>
               <div className="form-group">
                 <label>Tiempo</label>
-                <input type="text" className="form-control" ref={inputTiempoRef} />
+                <input
+                  type="text"
+                  className="form-control"
+                  ref={inputTiempoRef}
+                />
               </div>
               <div className="form-group">
                 <label>Fecha</label>
-                <input type="date" className="form-control" ref={inputFechaRef} />
+                <input
+                  type="date"
+                  className="form-control"
+                  ref={inputFechaRef}
+                />
               </div>
             </form>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onToggleModal}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onToggleModal}
+            >
               Cerrar
             </button>
-            <button type="button" className="btn btn-primary" onClick={guardarRegistro}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={guardarRegistro}
+            >
               Guardar
             </button>
           </div>
@@ -111,4 +128,3 @@ const EjerciciosModal = ({ onToggleModal }) => {
 };
 
 export default EjerciciosModal;
-

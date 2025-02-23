@@ -13,7 +13,6 @@ function Header() {
   };
 
   const credenciales = JSON.parse(localStorage.getItem("credenciales"));
-  console.log(credenciales.usuario);
 
   return (
     <header

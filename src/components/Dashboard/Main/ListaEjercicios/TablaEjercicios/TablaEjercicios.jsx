@@ -3,7 +3,7 @@ import TablaEjerciciosFila from "./TablaEjerciciosFila/TablaEjerciciosFila";
 
 
 const ToDoTable = () => {
- // const toDos = useSelector((state) => state.userSlice.toDos);
+ const toDos = useSelector((state) => state.userSlice.toDos);
   return (
     <table className="table table-striped">
       <thead>
