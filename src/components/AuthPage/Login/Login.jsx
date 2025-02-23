@@ -43,10 +43,12 @@ const Login = () => {
       if (data.codigo !== 200) {
         setError("Credenciales incorrectas");
         dispatch(loginFailure("Credenciales incorrectas"));
-        return;
+        return; 
       }
 
       dispatch(loginSuccess(data));
+      console.log(loginSuccess(data))
+      console.log(data)
       localStorage.setItem("userData", JSON.stringify(data));
       localStorage.setItem("credenciales", JSON.stringify(credenciales));
       navigate("/dashboard");

@@ -2,30 +2,30 @@ import { useSelector } from "react-redux";
 import TablaEjerciciosFila from "./TablaEjerciciosFila/TablaEjerciciosFila";
 
 
-const ToDoTable = () => {
- //const toDos = useSelector((state) => state.userSlice.toDos);
+const TablaEjercicios = () => {
+ const ejercicios = useSelector((state) => state.userSlice.ejercicios);
+ console.log(ejercicios);
   return (
     <table className="table table-striped">
       <thead>
         <tr>
           <th>#</th>
-          <th>Title</th>
-          <th>Completed?</th>
-          <th>Delete</th>
+          <th>Ejercicio</th>
+          <th>Minutos?</th>
+          <th>Fecha</th>
         </tr>
       </thead>
       <tbody>
-        {/* {toDos.map((toDo) => (
+      {ejercicios.registros.map((ejercicio) => (
           <TablaEjerciciosFila
-            key={toDo.id}
-            id={toDo.id}
-            title={toDo.title}
-            completed={toDo.completed}
+            key={ejercicio.id}
+            id={ejercicio.id}
+            fecha={ejercicio.fecha}
           />
-        ))} */}
+        ))}
       </tbody>
     </table>
   );
 };
 
-export default ToDoTable;
+export default TablaEjercicios;

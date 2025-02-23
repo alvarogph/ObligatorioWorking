@@ -4,6 +4,7 @@ const initialState = {
   userData: null,
   isSubmitting: false,
   error: null,
+  ejercicios: [],
 };
 
 const userSlice = createSlice({
@@ -33,6 +34,19 @@ const userSlice = createSlice({
       state.isSubmitting = false;
       state.error = action.payload;
     },
+
+    cargarEjercicios: (state, action) => {
+      const { payload } = action;
+      state.ejercicios = action.payload;
+    },
+
+    onDeleteEjercicio: (state, action) => {
+      const { payload } = action;
+      const filteredEjercicios = state.ejercicios.filter(
+        (t) => t.id !== payload
+      );
+      state.toDos = filteredEjercicios;
+    },
   },
 });
 
@@ -43,5 +57,6 @@ export const {
   registrationStart,
   registrationSuccess,
   registrationFailure,
+  cargarEjercicios
 } = userSlice.actions;
 export default userSlice.reducer;
